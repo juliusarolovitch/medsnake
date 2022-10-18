@@ -44,7 +44,7 @@
     <xacro:default_inertial mass="10"/>
     <visual>
       <geometry>
-        <mesh filename="package://medsnake_sim/meshModel/base_part.STL" scale="0.001 0.001 0.001" />
+        <mesh filename="package://medsnake_description/mesh/base_part.STL" scale="0.001 0.001 0.001" />
       </geometry>
       <origin rpy="1.5707963 0 -1.5707963" xyz="0.822 0.315 -0.22" />
       <material name="blue" />
@@ -81,7 +81,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="package://medsnake_sim/meshModel/inner_part.STL" scale="0.001 0.001 0.001" />
+        <mesh filename="package://medsnake_description/mesh/inner_part.STL" scale="0.001 0.001 0.001" />
       </geometry>
       <origin rpy="0 3.1415926 0" xyz="0.315 -0.26 0.732" />
       <material name="red" />
@@ -113,7 +113,7 @@
     <xacro:default_inertial mass="7.7"/>
     <visual>
       <geometry>
-        <mesh filename="package://medsnake_sim/meshModel/outer_part.STL" scale="0.001 0.001 0.001" />
+        <mesh filename="package://medsnake_description/mesh/outer_part.STL" scale="0.001 0.001 0.001" />
       </geometry>
       <origin rpy="0 3.1415926 0" xyz="0.315 -0.26 0.662" />
       <material name="green" />
@@ -155,7 +155,7 @@
         <visual>
           <geometry>
             <!-- <cylinder length="${link_length}" radius="${link_radius}" /> -->
-            <mesh filename="package://medsnake_sim/meshModel/snake_outer_link.STL" scale="0.001 0.001 0.001" />
+            <mesh filename="package://medsnake_description/mesh/snake_outer_link.STL" scale="0.001 0.001 0.001" />
           </geometry>
           <origin rpy="1.5707963 0 0" xyz="0 0 ${link_length/2}" />
           <material name="yellow" />
