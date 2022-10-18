@@ -1,0 +1,36 @@
+########## REQUIRED ITEMS ################
+
+# Basic snake dimensions
+n_links: 10
+link_length: 9.23 # mm
+rail_screw_lead: 8 # mm
+
+########## OPTIONAL ITEMS ################
+
+# Extra dynamixel feedback you wish to monitor
+feedback_items:
+  - "Present_Temperature"
+  - "Present_Input_Voltage"
+
+# Maximum velocity for all snake cables
+max_velocity: 500 # 5 rev/min
+
+current_offset:
+  inner_snake_cable: 113.61906510034264
+  inner_snake_rail: 0.0
+  outer_snake_cable_A: 52.34226627508566
+  outer_snake_cable_B: -30.856338717572193
+  outer_snake_cable_C: 42.657611355849255
+  outer_snake_rail: 0.0
+
+calibration_coefficient:
+  outer_snake_cable_A: 34.3893
+  outer_snake_cable_B: 34.3416
+  outer_snake_cable_C: 34.3421
+  inner_snake_cable: 34.3657
+
+calibration_offset: # in volts
+  outer_snake_cable_A: 0.102
+  outer_snake_cable_B: 0.103
+  outer_snake_cable_C: 0.103
+  inner_snake_cable: 0.102

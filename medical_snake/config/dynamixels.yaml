@@ -1,0 +1,56 @@
+inner_snake_rail:
+  ID: 0
+  Return_Delay_Time: 0
+  Operating_Mode: 1
+  Profile_Acceleration: 0
+  Profile_Velocity: 0
+  Current_Limit: 350
+  Drive_Mode: 0
+  External_Port_Mode_1: 2
+  Profile_Velocity: 0
+  External_Port_Mode_2: 2
+outer_snake_rail:
+  ID: 1
+  Return_Delay_Time: 0
+  Operating_Mode: 1
+  Profile_Acceleration: 0
+  Profile_Velocity: 0
+  Current_Limit: 350
+  Profile_Velocity: 0
+  Drive_Mode: 0
+inner_snake_cable:
+  ID: 2
+  Return_Delay_Time: 0
+  Operating_Mode: 1
+  Profile_Acceleration: 0
+  Profile_Velocity: 0
+  Current_Limit: 2000
+  Profile_Velocity: 500
+  Drive_Mode: 1 # Reversed
+outer_snake_cable_A:
+  ID: 3
+  Return_Delay_Time: 0
+  Operating_Mode: 1
+  Profile_Acceleration: 0
+  Profile_Velocity: 0
+  Current_Limit: 2000
+  Profile_Velocity: 100
+  Drive_Mode: 0
+outer_snake_cable_B:
+  ID: 4
+  Return_Delay_Time: 0
+  Operating_Mode: 1
+  Profile_Acceleration: 0
+  Profile_Velocity: 0
+  Current_Limit: 2000
+  Profile_Velocity: 100
+  Drive_Mode: 1
+outer_snake_cable_C:
+  ID: 5
+  Return_Delay_Time: 0
+  Operating_Mode: 1
+  Profile_Acceleration: 0
+  Profile_Velocity: 0
+  Current_Limit: 2000
+  Profile_Velocity: 100
+  Drive_Mode: 0 # Reversed

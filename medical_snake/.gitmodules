@@ -1,0 +1,6 @@
+[submodule "drivers/DynamixelSDK"]
+	path = deps/DynamixelSDK
+	url = https://github.com/ROBOTIS-GIT/DynamixelSDK.git
+[submodule "deps/yaml-cpp"]
+	path = deps/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp.git

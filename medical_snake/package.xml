@@ -1,0 +1,25 @@
+<package format="2">
+  <name>medical_snake</name>
+  <version>0.0.1</version>
+  <description>
+    The medical_snake package
+  </description>
+  <maintainer email="gnastacast@gmail.com">Nico Zevallos</maintainer>
+  <license>MIT</license>
+
+  <url>https://biorobotics.org</url>
+  <author>Nico Zevallos</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
+  <!-- <exec_depend>rospy</exec_depend> -->
+
+  <!-- <test_depend>gtest</test_depend> -->
+
+  <doc_depend>doxygen</doc_depend>
+</package>
