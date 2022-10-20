@@ -34,3 +34,9 @@ calibration_offset: # in volts
   outer_snake_cable_B: 0.103
   outer_snake_cable_C: 0.103
   inner_snake_cable: 0.102
+
+target_tension:  # in Newton
+  outer_snake_cable_A: 20.0
+  outer_snake_cable_B: 20.0
+  outer_snake_cable_C: 20.0
+  inner_snake_cable: 30.0

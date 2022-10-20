@@ -83,6 +83,9 @@ class SnakeControl
 
   void loosen_outer_C();
 
+  void tension_control_inner();
+
+
   bool cmd_queue_empty();
 
   char get_cmd_queue_top();

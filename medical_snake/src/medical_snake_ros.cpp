@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
       control.publish_tension_reading();
       control.publish_snake_mode();
       // joint_publisher.send_msg();
-      
+      // std::cout << "control.cmd_queue_empty()" << control.cmd_queue_empty()<<"\n";
 
       if (!control.cmd_queue_empty() && control.get_cmd_queue_top() == 'o')
       {
@@ -207,6 +207,16 @@ int main(int argc, char **argv) {
         ROS_INFO("Loosening Outer Snake Cable C ...");
         control.loosen_outer_C();
       }
+
+
+      // Inner Snake Cable Tension Control
+      else if(!control.cmd_queue_empty() && control.get_cmd_queue_top() == ','
+              && control.snake_is_ready())
+      {
+        ROS_INFO("Inner Snake Cable Tension Control ...");
+        control.tension_control_inner();
+      }
+
 
       ros::spinOnce();
     }

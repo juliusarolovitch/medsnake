@@ -464,6 +464,19 @@
     </widget>
    </widget>
   </widget>
+  <widget class="QCommandLinkButton" name="tension_control_inner">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>470</y>
+     <width>177</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>tension_control_inner</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

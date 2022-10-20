@@ -53,6 +53,7 @@ enum modes {
   TIGHTENING, // for commands that uses force control: tighen(inner/outer)
   TIGHTENING_INNER,
   TIGHTENING_OUTER,
+  TENSIONCONTROL_INNER,
   HOMING_RAIL,
 };
 
@@ -133,6 +134,12 @@ class MedicalSnake : protected DynamixelController
 
   /// Homing rail
   void home_rail();
+
+
+  /// Velocity based tension controller for the inner snake 
+  /// based on the tension sensing feedback.
+  void tension_control_inner();
+
 
   /// Perform goal checking for current executing command function and 
   /// write register while the goal is not reached
@@ -286,6 +293,7 @@ class MedicalSnake : protected DynamixelController
   std::map<std::string, double> calib_coeff_;
   std::map<std::string, double> calib_offset_;
 
+  std::map<std::string, double> target_tension_;
 };
 
 #endif //MEDICAL_SNAKE_H

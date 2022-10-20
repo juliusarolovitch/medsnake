@@ -87,6 +87,10 @@ class MyPlugin(Plugin):
         self._widget.forward_inner.clicked[bool].connect(self.handle_forward_inner_clicked)
         self._widget.backward_inner.clicked[bool].connect(self.handle_backward_inner_clicked)
         
+        
+        # Tension controller
+        self._widget.tension_control_inner.clicked[bool].connect(self.handle_tension_crontrol_inner_clicked)
+
         # Set up a publisher for the gui_commands
         self.pub_ = rospy.Publisher('/gui_commands', Char, queue_size=1)
         self.rate = rospy.Rate(10)
@@ -239,5 +243,11 @@ class MyPlugin(Plugin):
         
     def handle_backward_inner_clicked(self):
         data = 99 # c
+        # rospy.loginfo(chr(data))
+        self.pub_.publish(data)
+        
+        
+    def handle_tension_crontrol_inner_clicked(self):
+        data = 44 # ,
         # rospy.loginfo(chr(data))
         self.pub_.publish(data)

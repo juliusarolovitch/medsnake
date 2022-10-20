@@ -23,7 +23,8 @@ void SnakeControl::command_set(const std_msgs::Char::ConstPtr& msg)
      key != 'o' && key != 'q' &&
      key != 'i' && key != 'j' && 
      key != 'k' && key != 'p' && 
-     key != 'n' && key != 'l')
+     key != 'n' && key != 'l' &&
+     key != ',')
   {
     ROS_INFO("[%c] is not a valid command", key);  
   }
@@ -258,6 +259,15 @@ void SnakeControl::loosen_outer_C()
   snake_.loosen_outer_C();
   command_queue_.erase(command_queue_.begin());
 }
+
+void SnakeControl::tension_control_inner()
+{
+  snake_.tension_control_inner();
+  command_queue_.erase(command_queue_.begin());
+}
+
+
+
 
 bool SnakeControl::cmd_queue_empty() {return command_queue_.empty();}
 

@@ -98,6 +98,15 @@ void MedicalSnake::initialize(const char* config_path, const char* dxl_config_pa
         calib_offset_[it_item->first.as<std::string>()] = it_item->second.as<float>();
       }
     }
+    if (name == "target_tension")
+    {
+      YAML::Node item = config[name];
+      for (YAML::const_iterator it_item = item.begin(); it_item != item.end(); it_item++)
+      {
+        std::string item_name = it_item->first.as<std::string>();
+        target_tension_[it_item->first.as<std::string>()] = it_item->second.as<float>();
+      }
+    }  
   }
   assert(has_n_links == true && has_link_length == true && 
          has_rail_screw_lead == true && has_max_velocity == true);
@@ -168,9 +177,9 @@ template <typename T> int sgn(T val)
     return (T(0) < val) - (val < T(0));
 }
 
+
 std::map<std::string, bool> MedicalSnake::check_goal()
 {
-  
   std::map<std::string, bool> goal_reached;
   float smoothing = 5.0;
   for (const std::pair<const std::string, int32_t> &goal : goals_)
@@ -202,7 +211,9 @@ std::map<std::string, bool> MedicalSnake::check_goal()
       // alternatively, can use "moving" for goal_reached
     }
     break;
-  
+  case modes::TENSIONCONTROL_INNER:
+    break;
+
   default:
     throw std::runtime_error("[MedicalSnake::check_goal] Medical snake has no goal under this command mode");
   }
@@ -281,6 +292,23 @@ void MedicalSnake::update()
         goal_quantity.push_back(int32_t(-goal_vel * ideal_speed[motor_pair.first]));
         all_stop = false;
       }
+      else if (medsnake_mode_ == TENSIONCONTROL_INNER)
+      {  
+        // tension_control_inner();
+
+        double current_tension_inner;
+        double error_tension_inner;
+        current_tension_inner = tension_reading({"inner_snake_cable"});
+        error_tension_inner = target_tension_["inner_snake_cable"] - current_tension_inner;
+
+        double k = -5.0;
+        double goal_vel_control = k* error_tension_inner;
+
+        goal_quantity.push_back(goal_vel_control);
+        // goal_quantity.push_back(goals_[motor_pair.first]);
+        std::cout << "Inner tension control, goal velocity:" << goal_vel_control << "\n";
+        all_stop = false;
+      }
     }
     else
     { // if a single motor has reached its goal
@@ -290,10 +318,14 @@ void MedicalSnake::update()
         // push 0 goal velocity to stop motor
         goal_to_write.push_back(motor_pair.first);
         goal_quantity.push_back(0);
+
+
       }
       
     }
   }
+
+
 
 
   if (medsnake_mode_ == modes::HOMING_RAIL)
@@ -337,6 +369,19 @@ void MedicalSnake::update()
     { // if the goal is reached for all motors
       set_mode(modes::READY);
       std::cout << "---------------position goal is reached------------------\n";
+    }
+  }
+  else if (medsnake_mode_ == modes::TENSIONCONTROL_INNER)
+  {    // if the goal is not reached for all motor or the function has not exectued for more than 2 cycles (7 Hz)
+    if (!all_stop)
+    { 
+      sync_write_register(goal_to_write, "Goal_Velocity", goal_quantity);
+    }
+    else
+    { // if the goal is reached for all motors write 0 to stop
+      sync_write_register(goal_to_write, "Goal_Velocity", goal_quantity);
+      set_mode(modes::READY);
+      std::cout << "---------------tighten goal is reached------------------\n";
     }
   }
 }
@@ -508,8 +553,10 @@ void MedicalSnake::tighten_outer()
   // tighten_command_timestamp_ = std::chrono::high_resolution_clock::now();
   set_mode(modes::TIGHTENING);
   set_opmode(VELOCITY_CONTROL_MODE, outer_snake_cable);
-  goals_ = {{"outer_snake_cable_A", 15}, {"outer_snake_cable_B", 15}, 
-            {"outer_snake_cable_C", 15}}; 
+  
+  goals_ = {{"outer_snake_cable_A", target_tension_["outer_snake_cable_A"]}, 
+            {"outer_snake_cable_B", target_tension_["outer_snake_cable_B"]}, 
+            {"outer_snake_cable_C", target_tension_["outer_snake_cable_C"]}}; 
 }
 
 void MedicalSnake::tighten_outer_A()
@@ -554,7 +601,7 @@ void MedicalSnake::tighten_inner()
   set_mode(modes::TIGHTENING);
   set_opmode(VELOCITY_CONTROL_MODE, {"inner_snake_cable"});
   // current goal (force goal)
-  goals_ = {{"inner_snake_cable", 40}};
+  goals_ = {{"inner_snake_cable", target_tension_["inner_snake_cable"]}};
 }
 
 
@@ -703,6 +750,26 @@ std::map<std::string, double> MedicalSnake::get_tension_fbk()
   return result;
 }
 
+
+void MedicalSnake::tension_control_inner()
+{
+  set_mode(modes::TENSIONCONTROL_INNER);
+  set_opmode(VELOCITY_CONTROL_MODE, {"inner_snake_cable"});
+
+  double current_tension_inner;
+  double error_tension_inner;
+  current_tension_inner = tension_reading({"inner_snake_cable"});
+  error_tension_inner = target_tension_["inner_snake_cable"] - current_tension_inner;
+
+  double k = -0.10;
+  double goal_vel_control = k* error_tension_inner;
+
+  goals_ = {{"inner_snake_cable", goal_vel_control}};
+  std::cout << "Inner tension control, goal velocity:" << goal_vel_control << "\n";
+
+}
+
+
 std::string MedicalSnake::get_snake_mode()
 {
   switch (medsnake_mode_)
@@ -719,6 +786,9 @@ std::string MedicalSnake::get_snake_mode()
   case modes::READY:
     return "Snake is Ready";
     break;
+  case modes::TENSIONCONTROL_INNER:
+    return "Tension Control for Inner Snake";
+    break;    
   default:
     return "";
   }
