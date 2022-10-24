@@ -6,7 +6,8 @@ from qt_gui.plugin import Plugin
 from python_qt_binding import loadUi
 from python_qt_binding.QtWidgets import QWidget
 from python_qt_binding.QtGui import QIcon
-from std_msgs.msg import Char, String, Float32
+from std_msgs.msg import Char, String
+from medical_snake.msg import Tension_readings
 
 
 class MyPlugin(Plugin):
@@ -81,6 +82,7 @@ class MyPlugin(Plugin):
         
         self._widget.forward_inner.clicked[bool].connect(self.handle_forward_inner_clicked)
         self._widget.backward_inner.clicked[bool].connect(self.handle_backward_inner_clicked)
+        self._widget.home_snake.clicked[bool].connect(self.homing_snake)
         
         # Set up a publisher for the gui_commands
         self.pub_ = rospy.Publisher('/gui_commands', Char, queue_size=1)
@@ -88,8 +90,9 @@ class MyPlugin(Plugin):
 
         # This line is establishing the subscriber for the medsnake mode, passed as a string to snake_mode_define function
         
-        self.sub_ = rospy.Subscriber('/medsnake_mode', String, self.snake_mode_cb)
-        self.sub_ = rospy.Subscriber('/tension_readings', Float32, self.snake_tension_cb)
+        self.medsnake_mode_sub_ = rospy.Subscriber('/medsnake_mode', String, self.snake_mode_cb)
+        self.tension_reading_sub_ = rospy.Subscriber('/tension_readings', Tension_readings, self.snake_tension_cb)
+        self.homing_sub_ = rospy.Subscriber('', , self.homing_snake)
         
     def snake_mode_cb(self, data):
         self._widget.snake_mode.setText(data.data)
@@ -97,12 +100,27 @@ class MyPlugin(Plugin):
             self._widget.snake_mode.setStyleSheet("background-color: white")
         else:
             self._widget.snake_mode.setStyleSheet("background-color: red")
-
+    # self.tension_array = []
     def snake_tension_cb(self, tension):
-        # self._widget.inner_tension.setText("Hi")
-        # self._widget.outer_tension_a.setText(str(round(tension.Header.outer_snake_cable_A, 2)))
-        # self._widget.outer_tension_b.setText(str(round(tension.outer_snake_cable_B, 2)))
-        # self._widget.outer_tension_c.setText(str(round(tension.outer_snake_cable_C, 2)))
+        # global tension_array
+        self._widget.inner_tension.setText(str(round(tension.inner_snake_cable, 2)))
+        self._widget.outer_tension_a.setText(str(round(tension.outer_snake_cable_A, 2)))
+        self._widget.outer_tension_b.setText(str(round(tension.outer_snake_cable_B, 2)))
+        self._widget.outer_tension_c.setText(str(round(tension.outer_snake_cable_C, 2)))
+        # tension_array = [tension.inner_snae_cable, tension.outer_snake_cable_A, tension.outer_snake_cable_B, tension.outer_snake_cable_C]
+        
+    # def homing_snake(self, status):
+    #     while status == can_continue:
+    #         can_home = True
+    #         for i in tension_array:
+    #             if i > 2:
+    #                 can_home = False
+    #                 self.pub_.publish(103)
+    #                 self.pub_.publish(98)
+                    
+    #         if can_home == True: 
+    #             self.pub_.publish(117)
+    #             self.pub_.publish(99)
         
     def shutdown_plugin(self):
         # TODO unregister all publishers here
