@@ -6,7 +6,7 @@ from qt_gui.plugin import Plugin
 from python_qt_binding import loadUi
 from python_qt_binding.QtWidgets import QWidget
 from python_qt_binding.QtGui import QIcon
-from std_msgs.msg import Char
+from std_msgs.msg import Char, String, Float32
 
 
 class MyPlugin(Plugin):
@@ -67,12 +67,7 @@ class MyPlugin(Plugin):
         self._widget.advance.clicked[bool].connect(self.handle_advance_clicked)
         self._widget.retract.clicked[bool].connect(self.handle_retract_clicked)
         
-        # Stop and demo
-        self._widget.stop.clicked[bool].connect(self.handle_stop_clicked)
-        self._widget.demo.clicked[bool].connect(self.handle_demo_clicked)
-        
-        # Individual outer snake cable control
-        self._widget.tighten_outer_A.clicked[bool].connect(self.handle_tighten_outer_A_clicked)
+        # Stop and demorospy.Sub(self.handle_tighten_outer_A_clicked)
         self._widget.tighten_outer_B.clicked[bool].connect(self.handle_tighten_outer_B_clicked)
         self._widget.tighten_outer_C.clicked[bool].connect(self.handle_tighten_outer_C_clicked)
         
@@ -91,17 +86,23 @@ class MyPlugin(Plugin):
         self.pub_ = rospy.Publisher('/gui_commands', Char, queue_size=1)
         self.rate = rospy.Rate(10)
 
-
-        # def snake_mode_define(data):
-            # self._widget.INSERTQTWIDGETBUTTONHERE.setText(data)
-
         # This line is establishing the subscriber for the medsnake mode, passed as a string to snake_mode_define function
         
-        # self.sub_ = rospy.Subscriber('/medsnake_mode', String, snake_mode_define)
+        self.sub_ = rospy.Subscriber('/medsnake_mode', String, self.snake_mode_cb)
+        self.sub_ = rospy.Subscriber('/tension_readings', Float32, self.snake_tension_cb)
         
-    # def snake_mode_define(data):
-    #     #import my plugin.ui and assigning
-    #     self._widget.INSERTQTWIDGETBUTTONHERE.setText(data)
+    def snake_mode_cb(self, data):
+        self._widget.snake_mode.setText(data.data)
+        if data.data == "Snake is Ready":
+            self._widget.snake_mode.setStyleSheet("background-color: white")
+        else:
+            self._widget.snake_mode.setStyleSheet("background-color: red")
+
+    def snake_tension_cb(self, tension):
+        # self._widget.inner_tension.setText("Hi")
+        # self._widget.outer_tension_a.setText(str(round(tension.Header.outer_snake_cable_A, 2)))
+        # self._widget.outer_tension_b.setText(str(round(tension.outer_snake_cable_B, 2)))
+        # self._widget.outer_tension_c.setText(str(round(tension.outer_snake_cable_C, 2)))
         
     def shutdown_plugin(self):
         # TODO unregister all publishers here
