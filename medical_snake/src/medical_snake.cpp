@@ -212,6 +212,7 @@ std::map<std::string, bool> MedicalSnake::check_goal()
     }
     break;
   case modes::TENSIONCONTROL_INNER:
+      // For now, leave checking goal empty for tension control.
     break;
 
   default:
@@ -294,19 +295,9 @@ void MedicalSnake::update()
       }
       else if (medsnake_mode_ == TENSIONCONTROL_INNER)
       {  
-        // tension_control_inner();
-
-        double current_tension_inner;
-        double error_tension_inner;
-        current_tension_inner = tension_reading({"inner_snake_cable"});
-        error_tension_inner = target_tension_["inner_snake_cable"] - current_tension_inner;
-
-        double k = -5.0;
-        double goal_vel_control = k* error_tension_inner;
-
-        goal_quantity.push_back(goal_vel_control);
-        // goal_quantity.push_back(goals_[motor_pair.first]);
-        std::cout << "Inner tension control, goal velocity:" << goal_vel_control << "\n";
+        update_inner_tension_goals();
+        goal_quantity.push_back(goals_[motor_pair.first]);
+        std::cout << "Inner tension control, goal velocity:" << goals_[motor_pair.first] << "\n";
         all_stop = false;
       }
     }
@@ -755,19 +746,28 @@ void MedicalSnake::tension_control_inner()
 {
   set_mode(modes::TENSIONCONTROL_INNER);
   set_opmode(VELOCITY_CONTROL_MODE, {"inner_snake_cable"});
+  update_inner_tension_goals();
+}
 
+void MedicalSnake::update_inner_tension_goals()
+{ 
   double current_tension_inner;
   double error_tension_inner;
   current_tension_inner = tension_reading({"inner_snake_cable"});
   error_tension_inner = target_tension_["inner_snake_cable"] - current_tension_inner;
 
-  double k = -0.10;
+  double k = -20;
   double goal_vel_control = k* error_tension_inner;
-
   goals_ = {{"inner_snake_cable", goal_vel_control}};
-  std::cout << "Inner tension control, goal velocity:" << goal_vel_control << "\n";
+  std::cout << "Update inner tension goals, goal velocity:" << goal_vel_control << "\n";
 
 }
+
+void MedicalSnake::update_tension_control_goals(std::vector<std::string> motor_names)
+{ 
+
+}
+
 
 
 std::string MedicalSnake::get_snake_mode()

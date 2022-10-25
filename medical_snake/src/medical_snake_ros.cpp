@@ -11,7 +11,7 @@
 
 int main(int argc, char **argv) {
   ros::init(argc, argv, "medsnake_main_node");
-  SnakeControl control(argv[1], argv[2], argv[3]);
+  MedsnakeControl control(argv[1], argv[2], argv[3]);
   CommandJointStatePublisher joint_publisher(92);
 
   while(ros::ok())

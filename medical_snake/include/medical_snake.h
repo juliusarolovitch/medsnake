@@ -140,6 +140,13 @@ class MedicalSnake : protected DynamixelController
   /// based on the tension sensing feedback.
   void tension_control_inner();
 
+  /// Continously updating the tension goals for tension controller of
+  /// the inner snake.
+  void update_inner_tension_goals();
+
+  /// To update the tension goals as input.
+  void update_tension_control_goals(std::vector<std::string> motor_names);
+
 
   /// Perform goal checking for current executing command function and 
   /// write register while the goal is not reached

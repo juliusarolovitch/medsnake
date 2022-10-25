@@ -5,8 +5,10 @@
   
   <node name="medsnake_main" pkg="medical_snake" type="medical_snake_node"
         required="true" output="screen" args="$(arg usb_port) $(arg medsnake_config) $(arg dynamixel_config)"/>
+  
   <include file="$(find medsnake_sim)/launch/display.launch"/>
   <!-- <include file="$(find ascension)/launch/transform.launch"/> -->
+  
   <node name="medsnake_gui" pkg="rqt_gui" type="rqt_gui" respawn="false" output= "screen"
         args="--perspective-file $(find medsnake_gui)/rqt_config/medsnake_gui.perspective"/>
 </launch>

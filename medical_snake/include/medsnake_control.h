@@ -14,12 +14,12 @@
 
 
 
-class SnakeControl
+class MedsnakeControl
 {
 
  public:
   /// Constructor for SnakeControl instance
-  SnakeControl(const char* port_name, const char* config_path,
+  MedsnakeControl(const char* port_name, const char* config_path,
                        const char* dxl_config_path);
 
   /// initialize the snake
@@ -94,8 +94,8 @@ class SnakeControl
 
  private:
   MedicalSnake snake_;
-  ros::Subscriber sub_;
-  ros::Publisher pub_;
+  ros::Subscriber command_sub_;
+  ros::Publisher tension_pub_;
   ros::Publisher mode_pub_;
   ros::NodeHandle nh_;
   std::vector<char> command_queue_;
