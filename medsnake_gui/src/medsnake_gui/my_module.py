@@ -103,10 +103,10 @@ class MyPlugin(Plugin):
     # self.tension_array = []
     def snake_tension_cb(self, tension):
         # global tension_array
-        self._widget.inner_tension.setText(str(round(tension.inner_snake_cable, 2)))
-        self._widget.outer_tension_a.setText(str(round(tension.outer_snake_cable_A, 2)))
-        self._widget.outer_tension_b.setText(str(round(tension.outer_snake_cable_B, 2)))
-        self._widget.outer_tension_c.setText(str(round(tension.outer_snake_cable_C, 2)))
+        self._widget.inner_tension.setText(str(round(tension.inner_snake_cable, 2)) + " N")
+        self._widget.outer_tension_a.setText(str(round(tension.outer_snake_cable_A, 2)) + " N")
+        self._widget.outer_tension_b.setText(str(round(tension.outer_snake_cable_B, 2)) + " N")
+        self._widget.outer_tension_c.setText(str(round(tension.outer_snake_cable_C, 2)) + " N")
         # tension_array = [tension.inner_snae_cable, tension.outer_snake_cable_A, tension.outer_snake_cable_B, tension.outer_snake_cable_C]
         
     # def homing_snake(self, status):
